@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Navigation } from '@/app/components/Navigation';
-import { ParallaxBackground } from "@/app/components/ParallaxBackground";
 import { Footer } from '@/app/components/Footer';
+import { ParallaxBackground } from '@/app/components/ParallaxBackground';
+
 import { HomePage } from '@/app/pages/HomePage';
 import { ServicesPage } from '@/app/pages/ServicesPage';
 import { WorkPage } from '@/app/pages/WorkPage';
@@ -18,10 +19,13 @@ import { ContactPage } from '@/app/pages/ContactPage';
 export default function App() {
   return (
     <Router basename={import.meta.env.BASE_URL}>
-      <div className="flex flex-col min-h-screen">
+      <div className="min-h-screen flex flex-col relative">
         <Navigation />
-        <ParallaxBackground strength={18} />
-        <main className="flex-1">
+
+        {/* Global parallax background for ALL pages */}
+        <ParallaxBackground strength={22} />
+
+        <main className="flex-1 relative">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/services" element={<ServicesPage />} />
@@ -37,6 +41,7 @@ export default function App() {
             <Route path="/contact" element={<ContactPage />} />
           </Routes>
         </main>
+
         <Footer />
       </div>
     </Router>
