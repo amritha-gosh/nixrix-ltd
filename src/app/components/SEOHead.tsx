@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 interface SEOProps {
-  title?: string;
-  description?: string;
+  title: string;
+  description: string;
   keywords?: string;
   ogImage?: string;
   canonicalUrl?: string;
@@ -11,160 +11,115 @@ interface SEOProps {
 }
 
 export function SEOHead({
-  title = 'NIXRIX LTD - Modern Business Websites with AI & Dashboards | UK Web Design',
-  description = 'Professional websites starting from £249. AI chatbots, KPI dashboards, automation, and SEO. Based in Leeds, UK. Transform your digital presence with intelligent web solutions.',
-  keywords = 'web design UK, business websites, AI chatbot, KPI dashboard, Power BI integration, website automation, SEO services, Leeds web design, intelligent websites, SME web solutions',
+  title,
+  description,
+  keywords = 'NIXRIX, web design UK, SME websites, business websites, AI chatbot, KPI dashboard, website automation, SEO services, Leeds web design',
   ogImage = 'https://images.unsplash.com/photo-1758519291531-e96279895745?w=1200',
   canonicalUrl,
-  schemaType = 'website'
+  schemaType = 'website',
 }: SEOProps) {
   const location = useLocation();
-  const baseUrl = 'https://nixrix.com'; // Replace with actual domain
-  const fullUrl = canonicalUrl || `${baseUrl}${location.pathname}`;
+
+  /**
+   * IMPORTANT:
+   * When you move to your custom domain, change this ONE line to:
+   * const BASE_URL = 'https://nixrix.com';
+   */
+  const BASE_URL = 'https://amritha-gosh.github.io/nixrix-ltd';
+
+  const fullUrl = canonicalUrl || `${BASE_URL}${location.pathname}`;
 
   useEffect(() => {
-    // Update document title
-    document.title = title;
-
-    // Update or create meta tags
-    const updateMeta = (name: string, content: string, property?: boolean) => {
-      const attribute = property ? 'property' : 'name';
-      let element = document.querySelector(`meta[${attribute}="${name}"]`);
-      
-      if (!element) {
-        element = document.createElement('meta');
-        element.setAttribute(attribute, name);
-        document.head.appendChild(element);
+    /* ---------- Helpers ---------- */
+    const upsertMeta = (attr: 'name' | 'property', key: string, content: string) => {
+      let el = document.querySelector(`meta[${attr}="${key}"]`) as HTMLMetaElement | null;
+      if (!el) {
+        el = document.createElement('meta');
+        el.setAttribute(attr, key);
+        document.head.appendChild(el);
       }
-      
-      element.setAttribute('content', content);
+      el.setAttribute('content', content);
     };
 
-    // Standard meta tags
-    updateMeta('description', description);
-    updateMeta('keywords', keywords);
-    updateMeta('author', 'NIXRIX LTD');
-    updateMeta('robots', 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1');
-    updateMeta('googlebot', 'index, follow');
-    
-    // Open Graph tags
-    updateMeta('og:title', title, true);
-    updateMeta('og:description', description, true);
-    updateMeta('og:url', fullUrl, true);
-    updateMeta('og:type', 'website', true);
-    updateMeta('og:image', ogImage, true);
-    updateMeta('og:image:width', '1200', true);
-    updateMeta('og:image:height', '630', true);
-    updateMeta('og:site_name', 'NIXRIX LTD', true);
-    updateMeta('og:locale', 'en_GB', true);
-    
-    // Twitter Card tags
-    updateMeta('twitter:card', 'summary_large_image');
-    updateMeta('twitter:title', title);
-    updateMeta('twitter:description', description);
-    updateMeta('twitter:image', ogImage);
-    
-    // Additional SEO tags
-    updateMeta('viewport', 'width=device-width, initial-scale=1, maximum-scale=5');
-    updateMeta('theme-color', '#0D9488');
-    
-    // Canonical link
-    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.rel = 'canonical';
-      document.head.appendChild(canonical);
-    }
-    canonical.href = fullUrl;
+    const upsertLink = (rel: string, href: string) => {
+      let el = document.querySelector(`link[rel="${rel}"]`) as HTMLLinkElement | null;
+      if (!el) {
+        el = document.createElement('link');
+        el.setAttribute('rel', rel);
+        document.head.appendChild(el);
+      }
+      el.setAttribute('href', href);
+    };
 
-    // Schema.org structured data
-    const schemaData = {
+    /* ---------- Basic SEO ---------- */
+    document.title = title;
+
+    upsertMeta('name', 'description', description);
+    upsertMeta('name', 'keywords', keywords);
+    upsertMeta('name', 'author', 'NIXRIX');
+    upsertMeta(
+      'name',
+      'robots',
+      'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1'
+    );
+    upsertMeta('name', 'googlebot', 'index, follow');
+    upsertMeta('name', 'viewport', 'width=device-width, initial-scale=1, maximum-scale=5');
+    upsertMeta('name', 'theme-color', '#0D9488');
+
+    upsertLink('canonical', fullUrl);
+
+    /* ---------- Open Graph ---------- */
+    upsertMeta('property', 'og:site_name', 'NIXRIX');
+    upsertMeta('property', 'og:type', 'website');
+    upsertMeta('property', 'og:title', title);
+    upsertMeta('property', 'og:description', description);
+    upsertMeta('property', 'og:url', fullUrl);
+    upsertMeta('property', 'og:image', ogImage);
+    upsertMeta('property', 'og:image:width', '1200');
+    upsertMeta('property', 'og:image:height', '630');
+    upsertMeta('property', 'og:locale', 'en_GB');
+
+    /* ---------- Twitter ---------- */
+    upsertMeta('name', 'twitter:card', 'summary_large_image');
+    upsertMeta('name', 'twitter:title', title);
+    upsertMeta('name', 'twitter:description', description);
+    upsertMeta('name', 'twitter:image', ogImage);
+
+    /* ---------- Structured Data ---------- */
+    const schemaData: any = {
       '@context': 'https://schema.org',
       '@type': schemaType === 'organization' ? 'Organization' : 'WebSite',
-      name: 'NIXRIX LTD',
-      description: description,
-      url: baseUrl,
-      logo: `${baseUrl}/logo.png`,
+      name: 'NIXRIX',
+      description,
+      url: BASE_URL,
+      logo: `${BASE_URL}/logo.png`,
+      email: 'hello@nixrix.com',
       address: {
         '@type': 'PostalAddress',
         addressLocality: 'Leeds',
-        addressCountry: 'GB'
+        addressCountry: 'GB',
       },
-      contactPoint: {
-        '@type': 'ContactPoint',
-        email: 'hello@nixrix.com',
-        contactType: 'Customer Service',
-        areaServed: 'GB'
-      },
-      sameAs: [
-        // Add social media links when available
-      ],
-      ...(schemaType === 'organization' && {
-        '@type': 'Organization',
-        founder: {
-          '@type': 'Person',
-          name: 'NIXRIX Team'
-        },
-        foundingDate: '2024',
-        areaServed: {
-          '@type': 'GeoCircle',
-          geoMidpoint: {
-            '@type': 'GeoCoordinates',
-            latitude: '53.8008',
-            longitude: '-1.5491'
-          }
-        }
-      }),
-      ...(schemaType === 'service' && {
-        '@type': 'Service',
-        serviceType: 'Web Design and Development',
-        provider: {
-          '@type': 'Organization',
-          name: 'NIXRIX LTD'
-        },
-        areaServed: 'GB',
-        hasOfferCatalog: {
-          '@type': 'OfferCatalog',
-          name: 'Web Design Services',
-          itemListElement: [
-            {
-              '@type': 'Offer',
-              itemOffered: {
-                '@type': 'Service',
-                name: 'Website Design',
-                description: 'Professional responsive websites starting from £249'
-              }
-            },
-            {
-              '@type': 'Offer',
-              itemOffered: {
-                '@type': 'Service',
-                name: 'AI Chatbot Integration',
-                description: 'Intelligent chatbots for customer engagement and lead capture'
-              }
-            },
-            {
-              '@type': 'Offer',
-              itemOffered: {
-                '@type': 'Service',
-                name: 'KPI Dashboard Integration',
-                description: 'Power BI dashboards with real-time business insights'
-              }
-            }
-          ]
-        }
-      })
     };
 
-    let scriptTag = document.querySelector('script[type="application/ld+json"]');
-    if (!scriptTag) {
-      scriptTag = document.createElement('script');
-      scriptTag.type = 'application/ld+json';
-      document.head.appendChild(scriptTag);
+    if (schemaType === 'service') {
+      schemaData['@type'] = 'Service';
+      schemaData.serviceType = 'Web Design and Digital Solutions';
+      schemaData.provider = {
+        '@type': 'Organization',
+        name: 'NIXRIX',
+      };
+      schemaData.areaServed = 'GB';
     }
-    scriptTag.textContent = JSON.stringify(schemaData);
 
-  }, [title, description, keywords, ogImage, fullUrl, schemaType]);
+    let script = document.querySelector('script[type="application/ld+json"]');
+    if (!script) {
+      script = document.createElement('script');
+      script.type = 'application/ld+json';
+      document.head.appendChild(script);
+    }
+    script.textContent = JSON.stringify(schemaData);
+
+  }, [title, description, keywords, ogImage, canonicalUrl, schemaType, location.pathname]);
 
   return null;
 }
