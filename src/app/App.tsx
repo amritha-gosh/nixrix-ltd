@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Navigation } from '@/app/components/Navigation';
+import { ParallaxBackground } from "@/app/components/ParallaxBackground";
 import { Footer } from '@/app/components/Footer';
 import { HomePage } from '@/app/pages/HomePage';
 import { ServicesPage } from '@/app/pages/ServicesPage';
@@ -19,6 +20,7 @@ export default function App() {
     <Router basename={import.meta.env.BASE_URL}>
       <div className="flex flex-col min-h-screen">
         <Navigation />
+        <ParallaxBackground strength={18} />
         <main className="flex-1">
           <Routes>
             <Route path="/" element={<HomePage />} />
