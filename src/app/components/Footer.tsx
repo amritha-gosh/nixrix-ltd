@@ -10,19 +10,26 @@ export function Footer() {
           <div className="col-span-1">
             <div className="flex items-center mb-4">
               <span className="text-2xl font-bold text-[#0D9488]">NIXRIX</span>
-              <span className="ml-2 text-sm text-gray-400">LTD</span>
             </div>
+
             <p className="text-gray-400 text-sm mb-4">
               Decision-Intelligent Websites for SMEs
             </p>
+
             <div className="space-y-2">
               <div className="flex items-center text-sm text-gray-400">
                 <MapPin size={16} className="mr-2" />
                 Leeds, UK
               </div>
+
               <div className="flex items-center text-sm text-gray-400">
                 <Mail size={16} className="mr-2" />
-                help@nixrix.com
+                <a
+                  href="mailto:hello@nixrix.com"
+                  className="hover:text-[#06B6D4] transition-colors"
+                >
+                  hello@nixrix.com
+                </a>
               </div>
             </div>
           </div>
@@ -139,7 +146,7 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-          <p>&copy; {new Date().getFullYear()} NIXRIX LTD. All rights reserved.</p>
+          <p>&copy; 2025 NIXRIX. All rights reserved.</p>
         </div>
       </div>
     </footer>
