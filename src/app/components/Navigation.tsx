@@ -28,10 +28,10 @@ export function Navigation() {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <motion.nav 
+    <motion.nav
       className={`sticky top-0 z-50 transition-all duration-300 ${
-        isScrolled 
-          ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200' 
+        isScrolled
+          ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200'
           : 'bg-white border-b border-gray-100'
       }`}
       initial={{ y: -100 }}
@@ -39,20 +39,21 @@ export function Navigation() {
       transition={{ duration: 0.3 }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className={`flex justify-between items-center transition-all duration-300 ${
-          isScrolled ? 'h-14' : 'h-16'
-        }`}>
+        <div
+          className={`flex justify-between items-center transition-all duration-300 ${
+            isScrolled ? 'h-14' : 'h-16'
+          }`}
+        >
           {/* Logo */}
           <Link to="/" className="flex items-center group">
-            <motion.div 
+            <motion.div
               className="flex items-center"
               whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 400 }}
+              transition={{ type: 'spring', stiffness: 400 }}
             >
-              <span className="text-2xl font-bold bg-gradient-to-r from-[#0D9488] to-[#06B6D4] bg-clip-text text-transparent">
+              <span className="text-3xl font-extrabold tracking-wide bg-gradient-to-r from-[#0D9488] to-[#06B6D4] bg-clip-text text-transparent">
                 NIXRIX
               </span>
-              <span className="ml-2 text-sm text-gray-600 font-medium">LTD</span>
             </motion.div>
           </Link>
 
@@ -73,13 +74,14 @@ export function Navigation() {
                   <motion.div
                     className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#0D9488] to-[#06B6D4]"
                     layoutId="activeNav"
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
               </Link>
             ))}
-            <motion.div 
-              whileHover={{ scale: 1.05 }} 
+
+            <motion.div
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="ml-4"
             >
@@ -131,7 +133,7 @@ export function Navigation() {
         {/* Mobile Navigation */}
         <AnimatePresence>
           {isMenuOpen && (
-            <motion.div 
+            <motion.div
               className="md:hidden py-4 space-y-2 border-t"
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
@@ -158,6 +160,7 @@ export function Navigation() {
                   </Link>
                 </motion.div>
               ))}
+
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
